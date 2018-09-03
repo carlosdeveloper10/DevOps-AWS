@@ -11,7 +11,7 @@ pipeline {
         
         stage('Build') { 
             steps { 
-                sh './gradlew build -skipTest' 
+                sh './gradlew build' 
             }
         }
         stage('Test'){
