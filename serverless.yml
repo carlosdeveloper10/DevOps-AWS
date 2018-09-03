@@ -1,0 +1,37 @@
+service: aws-java-devops-test
+
+frameworkVersion: ">=1.2.0 <2.0.0"
+
+provider:
+  name: aws
+  runtime: java8
+  
+package:
+  artifact: build/distributions/aws-java-simple-http-endpoint.zip
+
+Resources:
+  Employee:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: Employee
+      Handler: com.Handler
+      Runtime: java8
+      CodeUri: s3://arungupta/client-1.0-SNAPSHOT.jar
+      Description: Manage Employee Database
+      Timeout: 30
+      MemorySize: 1024
+      Environment:
+        Variables:
+          RDS_HOSTNAME: lambdamysqltest.ceqhe5auupjj.us-west-1.rds.amazonaws.com:3306
+          RDS_DB_NAME: ExampleDB
+          RDS_USERNAME: master
+          RDS_PASSWORD: master123
+      Role: arn:aws:iam::091144949931:role/microserviceRole
+      
+functions:
+  currentTime:
+    handler: com.serverless.Handler
+    events:
+      - http:
+          path: ping
+method: post

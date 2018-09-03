@@ -1,0 +1,65 @@
+configurations {
+    jaxb
+}
+
+apply plugin: 'java'
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = "0.7.7.201606060606"
+}
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml {
+            enabled true
+        }
+
+        html {
+            enabled true
+        }
+    }
+
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it,
+                    exclude: ['com/serverless/clients/contexts/**', 'com/serverless/Handler**'])
+        })
+    }
+}
+
+dependencies {
+	compile 'com.amazonaws:aws-lambda-java-core:1.1.0'
+    compile 'com.amazonaws:aws-lambda-java-events:1.1.0'
+    compile 'com.amazonaws:aws-lambda-java-core:1.+'
+    compile 'com.amazonaws:aws-java-sdk-lambda:1.+'
+    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.2.10.Final'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '6.0.6'
+}
+
+task buildZip(type: Zip) {
+    baseName = "consult"
+    from compileJava
+    from processResources
+    into('lib') {
+        from configurations.runtime
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.6'
+}
+
+build.dependsOn buildZip
