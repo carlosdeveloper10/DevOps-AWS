@@ -1,0 +1,40 @@
+pipeline { 
+    agent any 
+
+    environment{
+        AWS_ACCESS_KEY_ID     = credentials('devops-aws-access-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('devops-aws-secret-access-key')
+        scannerHome = tool 'SonarQubeScanner'
+    }
+
+    stages {
+        
+        stage('Sonarqube') {
+            steps {
+                withSonarQubeEnv('sonarqube') {
+                    sh "${scannerHome}/bin/sonar-scanner"
+                }
+                timeout(time: 10, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
+        stage('Build') { 
+            steps { 
+                sh './gradlew build -skipTest' 
+            }
+        }
+        stage('Test'){
+            steps {
+                sh 'make check'
+                junit 'reports/**/*.xml' 
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'make publish'
+            }
+        }
+    }
+}
