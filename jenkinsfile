@@ -12,6 +12,8 @@ pipeline {
         stage('Check System') { 
             steps { 
                 sh 'env' 
+                sh 'ls' 
+                sh 'pwd' 
             }
         }
         stage('Build') { 
