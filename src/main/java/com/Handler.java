@@ -1,4 +1,4 @@
-package com;
+/*package com;
 
 import com.domain.Client;
 
@@ -21,5 +21,5 @@ public class Handler implements RequestHandler<Client, String> {
 
         return String.format("Added %s %s.", client.getId(), client.getName());
     }
-}
+}*/
 
