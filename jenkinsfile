@@ -8,7 +8,12 @@ pipeline {
     }
 
     stages {
-        
+
+        stage('Check System') { 
+            steps { 
+                sh 'env' 
+            }
+        }
         stage('Build') { 
             steps { 
                 sh './gradlew build' 
@@ -23,7 +28,7 @@ pipeline {
         stage('Sonarqube') {
             steps {
                 withSonarQubeEnv('sonarqube') {
-                    sh "${scannerHome}/bin/sonar-scanner"
+                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=carlos -Dsonar.sources=/src/main/java"
                 }
                 timeout(time: 10, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
