@@ -11,13 +11,13 @@ pipeline {
         
         stage('Build') { 
             steps { 
-                sh './gradlew build' 
+                sh './gradlew build -skipTest' 
             }
         }
         stage('Test'){
             steps {
-                sh 'make check'
-                junit 'reports/**/*.xml' 
+                sh './gradlew test'
+                //junit 'reports/**/*.xml' 
             }
         }
         stage('Sonarqube') {
@@ -30,7 +30,6 @@ pipeline {
                 }
             }
         }
-        
         stage('Deploy') {
             steps {
                 sh 'make publish'
