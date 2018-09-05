@@ -24,7 +24,7 @@ pipeline {
         stage('Test'){
             steps {
                 sh './gradlew cleanTest test'
-                junit 'build/test-results/**/TEST-*.xml' 
+                //junit 'build/test-results/**/TEST-*.xml' 
             }
         }
         stage('Sonarqube') {
@@ -40,6 +40,13 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh 'make publish'
+            }
+        }
+        
+        post {
+            always {
+                //archiveArtifacts artifacts: 'build/libs/**/*.jar', fingerprint: true
+                junit 'build/test-results/**/TEST-*.xml' 
             }
         }
     }
