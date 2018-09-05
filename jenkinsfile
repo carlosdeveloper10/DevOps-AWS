@@ -29,10 +29,10 @@ pipeline {
         }
         stage('Sonarqube') {
             steps {
-                withSonarQubeEnv('sonarqube') {
-                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=devops -Dsonar.sources=src/main/java -Dsonar.java.binaries=build/libs"
+                withSonarQubeEnv('SonarQube') {
+                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectVersion=${BUILD_ID} -Dsonar.language=java -Dsonar.projectName=devops_AWS -Dsonar.projectKey=devops -Dsonar.sources=src/main/java -Dsonar.java.binaries=build/libs"
                 }
-                timeout(time: 10, unit: 'MINUTES') {
+                timeout(time: 1, unit: 'HOURS') {
                     waitForQualityGate abortPipeline: true
                 }
             }
