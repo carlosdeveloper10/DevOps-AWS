@@ -11,7 +11,7 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 public class AddClientHandler implements RequestHandler<Object, String> {
 
 	@Inject
-	private Connection connection;
+	Connection connection;
 	
     @Override
     public String handleRequest(Object client, Context context) {      
