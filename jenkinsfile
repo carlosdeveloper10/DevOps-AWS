@@ -42,12 +42,11 @@ pipeline {
                 sh 'make publish'
             }
         }
-        
-        post {
-            always {
-                //archiveArtifacts artifacts: 'build/libs/**/*.jar', fingerprint: true
-                junit 'build/test-results/**/TEST-*.xml' 
-            }
+    }//Stage end
+    post {
+        always {
+            //archiveArtifacts artifacts: 'build/libs/**/*.jar', fingerprint: true
+            junit 'build/test-results/**/TEST-*.xml' 
         }
     }
 }
