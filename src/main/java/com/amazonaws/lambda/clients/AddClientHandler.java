@@ -1,6 +1,6 @@
-/*package com;
+package com.amazonaws.lambda.clients;
 
-import com.domain.Client;
+import javax.inject.Inject;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -8,18 +8,20 @@ import org.hibernate.SessionFactory;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
-public class Handler implements RequestHandler<Client, String> {
+public class AddClientHandler implements RequestHandler<Object, String> {
 
+	@Inject
+	private Connection connection;
+	
     @Override
-    public String handleRequest(Client client, Context context) {
-    	SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+    public String handleRequest(Object client, Context context) {      
+        SessionFactory sessionFactory = connection.getSessionFactory();
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.save(client);
             session.getTransaction().commit();
         }
-
-        return String.format("Added %s %s.", client.getId(), client.getName());
+        return "Hello from Lambda!";
     }
-}*/
 
+}
